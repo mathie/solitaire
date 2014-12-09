@@ -45,3 +45,12 @@ func TestPadding(t *testing.T) {
   expected := []string{ "GOODB", "YECRU", "ELWOR", "LDXXX" }
   assertEncoded(expected, message, t)
 }
+
+func TestDifferentBlockSize(t *testing.T) {
+  message := "Goodbye, cruel world!"
+  expected := []string{ "GOODBYECRU", "ELWORLDXXX" }
+
+  actual := EncodeMessageWithBlockSize(message, 10)
+
+  assertSameArray(expected, actual, t)
+}

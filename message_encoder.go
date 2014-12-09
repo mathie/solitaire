@@ -23,8 +23,12 @@ import (
 // CODIN GINGO ISAWE SOMEX
 func EncodeMessage(message string) []string {
   blockSize := 5
+  return EncodeMessageWithBlockSize(message, blockSize)
+}
 
-  return encodeToBlocks(strings.Map(removeNonAlpha, strings.ToUpper(message)), blockSize)
+func EncodeMessageWithBlockSize(message string, blockSize int) []string {
+  sanitisedString := strings.Map(removeNonAlpha, strings.ToUpper(message))
+  return encodeToBlocks(sanitisedString, blockSize)
 }
 
 // If the character is an upper case letter, return it. If not, return an
@@ -60,7 +64,7 @@ func splitIntoBlocks(blockSize int) bufio.SplitFunc {
 
     if len(data) > blockSize {
       advance = blockSize
-      token = data[0:5]
+      token = data[0:blockSize]
       return
     } else if atEOF {
       advance = len(data)
