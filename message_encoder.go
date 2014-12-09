@@ -1,7 +1,6 @@
 package main
 
 import (
-  "math"
   "bufio"
   "strings"
 )
@@ -23,38 +22,69 @@ import (
 //
 // CODIN GINGO ISAWE SOMEX
 func EncodeMessage(message string) []string {
-  removeNonAlpha := func(r rune) rune {
-    if r >= 'A' && r <= 'Z'{
-      return r
-    } else {
-      return -1
-    }
+  blockSize := 5
+
+  return encodeToBlocks(strings.Map(removeNonAlpha, strings.ToUpper(message)), blockSize)
+}
+
+// If the character is an upper case letter, return it. If not, return an
+// invalid rune, indicating that it should be removed. Intended to be used with
+// strings.Map().
+func removeNonAlpha(r rune) rune {
+  if r >= 'A' && r <= 'Z'{
+    return r
+  } else {
+    return -1
+  }
+}
+
+// Take a string and encode it into blocks, each of size blockSize. The last
+// block will be padded with 'X' characters to make sure all blocks are of the
+// same size.
+func encodeToBlocks(message string, blockSize int) (results []string) {
+  scanner := bufio.NewScanner(strings.NewReader(message))
+  scanner.Split(splitIntoBlocks(blockSize))
+
+  for scanner.Scan() {
+    results = append(results, scanner.Text())
   }
 
-  sanitizedString := strings.Map(removeNonAlpha, strings.ToUpper(message))
+  return results
+}
 
-  scanner := bufio.NewScanner(strings.NewReader(sanitizedString))
+// Split a string into blocks of 5 bytes each. Intended to be used as the split
+// function of a Scanner.
+func splitIntoBlocks(blockSize int) bufio.SplitFunc {
+  splitIntoBlocks := func(data []byte, atEOF bool) (advance int, token []byte, err error) {
+    err = nil
 
-  split := func(data []byte, atEOF bool) (advance int, token []byte, err error) {
-    if len(data) > 5 {
-      return 5, data[0:5], nil
+    if len(data) > blockSize {
+      advance = blockSize
+      token = data[0:5]
+      return
     } else if atEOF {
-      padding := []byte{'X','X','X','X','X'}
-      return len(data), append(data[:], padding[:(5-len(data))]...), nil
+      advance = len(data)
+      token = padBlock(data, blockSize)
+      return
     } else {
+      // Not at the EOF, but we've been supplied less data than the block size.
+      // Ask the scanner to try again with more data.
       return 0, nil, nil
     }
   }
 
-  scanner.Split(split)
+  return splitIntoBlocks
+}
 
-  i := 0
-  results := make([]string, int32(math.Ceil(float64(len(sanitizedString)) / 5.0)))
+// Take a block which is smaller than blockSize, and pad it up to being
+// blockSize characters by appending 'X'es.
+func padBlock(data []byte, blockSize int) []byte {
+  // FIXME: This needs to be at least as large as the largest passed-in block
+  // size. It just happens to work for this particular version...
+  paddingBytes := []byte{'X','X','X','X','X'}
 
-  for scanner.Scan() {
-    results[i] = scanner.Text()
-    i++
-  }
+  paddingSize := blockSize - len(data)
+  padding := paddingBytes[:paddingSize]
 
-  return results
+  return append(data, padding...)
 }
