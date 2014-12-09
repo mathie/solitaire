@@ -52,8 +52,8 @@ func encodeToBlocks(message string, blockSize int) (results []string) {
   return results
 }
 
-// Split a string into blocks of 5 bytes each. Intended to be used as the split
-// function of a Scanner.
+// Split a string into blocks of blockSize bytes each. Returns a function which
+// is intended to be used as the split function of a Scanner.
 func splitIntoBlocks(blockSize int) bufio.SplitFunc {
   splitIntoBlocks := func(data []byte, atEOF bool) (advance int, token []byte, err error) {
     err = nil
