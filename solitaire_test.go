@@ -12,6 +12,16 @@ func TestEncryption(t *testing.T) {
   assertSameStringArray(expected, actual, t)
 }
 
+func TestDecryption(t *testing.T) {
+  message   := []string{ "GLNCQ", "MJAFF", "FVOMB", "JIYCB" }
+  keystream := []string{ "DWJXH", "YRFDG", "TMSHP", "UURXJ" }
+  expected  := []string{ "CODEI", "NRUBY", "LIVEL", "ONGER" }
+
+  actual := Decrypt(message, keystream)
+
+  assertSameStringArray(expected, actual, t)
+}
+
 func ExampleHelloWorld() {
   main()
 
