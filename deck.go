@@ -41,23 +41,16 @@ func (deck *Deck) MoveBJokerDown() {
 }
 
 func (deck *Deck) TripleCut() {
-  maxIndex := 0
-  minIndex := 0
+  firstIndex := bytes.IndexByte(deck.cards, jokerA)
+  secondIndex := bytes.IndexByte(deck.cards, jokerB)
 
-  jokerAIndex := bytes.IndexByte(deck.cards, jokerA)
-  jokerBIndex := bytes.IndexByte(deck.cards, jokerB)
-
-  if jokerAIndex > jokerBIndex {
-    maxIndex = jokerAIndex
-    minIndex = jokerBIndex
-  } else {
-    minIndex = jokerAIndex
-    maxIndex = jokerBIndex
+  if firstIndex > secondIndex {
+    firstIndex, secondIndex = secondIndex, firstIndex
   }
 
-  minSlice := deck.cards[0:minIndex]
-  midSlice := deck.cards[minIndex:maxIndex + 1]
-  maxSlice := deck.cards[maxIndex + 1:]
+  minSlice := deck.cards[0:firstIndex]
+  midSlice := deck.cards[firstIndex:secondIndex + 1]
+  maxSlice := deck.cards[secondIndex + 1:]
 
   deck.cards = append(maxSlice, append(midSlice, minSlice...)...)
 }
