@@ -79,12 +79,10 @@ func splitIntoBlocks(blockSize int) bufio.SplitFunc {
 // Take a block which is smaller than blockSize, and pad it up to being
 // blockSize characters by appending 'X'es.
 func padBlock(data []byte, blockSize int) []byte {
-  // FIXME: This needs to be at least as large as the largest passed-in block
-  // size. It just happens to work for this particular version...
-  paddingBytes := []byte{'X','X','X','X','X'}
-
   paddingSize := blockSize - len(data)
-  padding := paddingBytes[:paddingSize]
-
-  return append(data, padding...)
+  paddedData := data
+  for i := 0; i < paddingSize; i++ {
+    paddedData = append(paddedData, 'X')
+  }
+  return paddedData
 }
