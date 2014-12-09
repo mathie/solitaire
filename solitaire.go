@@ -2,6 +2,7 @@ package main
 
 import (
   "fmt"
+  "log"
 )
 
 func Encrypt(message, keystream []string) []string {
@@ -10,10 +11,18 @@ func Encrypt(message, keystream []string) []string {
 
   results := [][]int{}
 
+  if len(encodedMessage) != len(encodedKeystream) {
+    log.Panicf("Message and key stream are different lengths.")
+  }
+
   for i := 0; i < len(encodedMessage); i++ {
     messageBlock := encodedMessage[i]
     keystreamBlock := encodedKeystream[i]
     resultsBlock := []int{}
+
+    if len(messageBlock) != len(keystreamBlock) {
+      log.Panicf("Message block and key stream blocks are different lengths.")
+    }
 
     for j := 0; j < len(messageBlock); j++ {
       messageChar   := messageBlock[j]
@@ -34,10 +43,18 @@ func Decrypt(message, keystream []string) []string {
 
   results := [][]int{}
 
+  if len(encodedMessage) != len(encodedKeystream) {
+    log.Panicf("Message and key stream are different lengths.")
+  }
+
   for i := 0; i < len(encodedMessage); i++ {
     messageBlock := encodedMessage[i]
     keystreamBlock := encodedKeystream[i]
     resultsBlock := []int{}
+
+    if len(messageBlock) != len(keystreamBlock) {
+      log.Panicf("Message block and key stream blocks are different lengths.")
+    }
 
     for j := 0; j < len(messageBlock); j++ {
       messageChar   := messageBlock[j]
