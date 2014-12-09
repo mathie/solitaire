@@ -26,22 +26,50 @@ func NewUnkeyedDeck() *Deck {
   return deck
 }
 
-func (deck Deck) MoveAJokerDown() {
-  distance := 1
-  jokerIndex := bytes.IndexByte(deck.cards, jokerA)
-  movingCard := deck.cards[jokerIndex]
-  nextCardIndex := jokerIndex + distance
-  nextCard := deck.cards[nextCardIndex]
-  deck.cards[jokerIndex] = nextCard
-  deck.cards[nextCardIndex] = movingCard
+func (deck *Deck) SetupDeck() {
+  deck.MoveAJokerDown()
+  deck.MoveBJokerDown()
+  deck.TripleCut()
+}
+
+func (deck *Deck) MoveAJokerDown() {
+  deck.moveCardDown(jokerA, 1)
 }
 
 func (deck *Deck) MoveBJokerDown() {
-  distance := 2
+  deck.moveCardDown(jokerB, 2)
+}
+
+func (deck *Deck) TripleCut() {
+  maxIndex := 0
+  minIndex := 0
+
+  jokerAIndex := bytes.IndexByte(deck.cards, jokerA)
+  jokerBIndex := bytes.IndexByte(deck.cards, jokerB)
+
+  if jokerAIndex > jokerBIndex {
+    maxIndex = jokerAIndex
+    minIndex = jokerBIndex
+  } else {
+    minIndex = jokerAIndex
+    maxIndex = jokerBIndex
+  }
+
+  minSlice := deck.cards[0:minIndex]
+  midSlice := deck.cards[minIndex:maxIndex + 1]
+  maxSlice := deck.cards[maxIndex + 1:]
+
+  deck.cards = append(maxSlice, append(midSlice, minSlice...)...)
+}
+
+func (deck *Deck) moveCardDown(card byte, distance int) {
   for i := 0; i < distance; i++ {
-    jokerIndex := bytes.IndexByte(deck.cards, jokerB)
+    jokerIndex := bytes.IndexByte(deck.cards, card)
     if jokerIndex == len(deck.cards) - 1 {
       deck.cards = append(deck.cards[len(deck.cards) - 1:], deck.cards[:len(deck.cards) - 1]...)
+
+      // Need to move once more, since we've really just moved the card to the
+      // top of the stack.
       distance += 1
     } else {
       movingCard := deck.cards[jokerIndex]
