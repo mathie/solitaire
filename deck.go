@@ -26,12 +26,6 @@ func NewUnkeyedDeck() *Deck {
   return deck
 }
 
-func (deck *Deck) SetupDeck() {
-  deck.MoveAJokerDown()
-  deck.MoveBJokerDown()
-  deck.TripleCut()
-}
-
 func (deck *Deck) MoveAJokerDown() {
   deck.moveCardDown(jokerA, 1)
 }
@@ -53,6 +47,15 @@ func (deck *Deck) TripleCut() {
   maxSlice := deck.cards[secondIndex + 1:]
 
   deck.cards = append(maxSlice, append(midSlice, minSlice...)...)
+}
+
+func (deck *Deck) CountCut() {
+  count := deck.cards[len(deck.cards) - 1]
+
+  minSlice := deck.cards[0:count]
+  midSlice := deck.cards[count:len(deck.cards) - 1]
+
+  deck.cards = append(append(midSlice, minSlice...), count)
 }
 
 func (deck *Deck) moveCardDown(card byte, distance int) {
