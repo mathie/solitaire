@@ -4,20 +4,20 @@ import "testing"
 
 func TestEncryption(t *testing.T) {
   message   := []string{ "CODEI", "NRUBY", "LIVEL", "ONGER" }
-  keystream := []string{ "DWJXH", "YRFDG", "TMSHP", "UURXJ" }
   expected  := []string{ "GLNCQ", "MJAFF", "FVOMB", "JIYCB" }
 
-  actual := Encrypt(message, keystream)
+  deck := NewUnkeyedDeck()
+  actual := Encrypt(message, deck)
 
   assertSameStringArray(expected, actual, t)
 }
 
 func TestDecryption(t *testing.T) {
   message   := []string{ "GLNCQ", "MJAFF", "FVOMB", "JIYCB" }
-  keystream := []string{ "DWJXH", "YRFDG", "TMSHP", "UURXJ" }
   expected  := []string{ "CODEI", "NRUBY", "LIVEL", "ONGER" }
 
-  actual := Decrypt(message, keystream)
+  deck := NewUnkeyedDeck()
+  actual := Decrypt(message, deck)
 
   assertSameStringArray(expected, actual, t)
 }

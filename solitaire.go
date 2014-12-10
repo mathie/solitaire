@@ -2,22 +2,21 @@ package main
 
 import (
   "fmt"
-  "log"
 )
 
 func main() {
   fmt.Println("Hello World.")
 }
 
-func Encrypt(message, keystream []string) []string {
+func Encrypt(message []string, deck *Deck) []string {
   encryptor := func(messageChar, keystreamChar int) int {
     return (messageChar + keystreamChar) % 26
   }
 
-  return process(message, keystream, encryptor)
+  return process(message, deck, encryptor)
 }
 
-func Decrypt(message, keystream []string) []string {
+func Decrypt(message []string, deck *Deck) []string {
   decryptor := func(messageChar, keystreamChar int) int {
     result := messageChar - keystreamChar
     if result < 0 {
@@ -26,32 +25,23 @@ func Decrypt(message, keystream []string) []string {
     return result
   }
 
-  return process(message, keystream, decryptor)
+  return process(message, deck, decryptor)
 }
 
 type processFunc func(int, int) int
 
-func process(message, keystream []string, processFunc processFunc) []string {
+func process(message []string, deck *Deck, processFunc processFunc) []string {
   encodedMessage := StreamEncoder(message)
-  encodedKeystream := StreamEncoder(keystream)
 
   results := [][]int{}
 
-  if len(encodedMessage) != len(encodedKeystream) {
-    log.Panicf("Message and key stream are different lengths.")
-  }
-
   for i := 0; i < len(encodedMessage); i++ {
     messageBlock := encodedMessage[i]
-    keystreamBlock := encodedKeystream[i]
     resultsBlock := []int{}
 
-    if len(messageBlock) != len(keystreamBlock) {
-      log.Panicf("Message block and key stream blocks are different lengths.")
-    }
-
     for j := 0; j < len(messageBlock); j++ {
-      resultsBlock = append(resultsBlock, processFunc(messageBlock[j], keystreamBlock[j]))
+      keystreamChar := int(deck.GetNextCode() % 26)
+      resultsBlock = append(resultsBlock, processFunc(messageBlock[j], keystreamChar))
     }
 
     results = append(results, resultsBlock)
