@@ -61,10 +61,12 @@ func (deck *Deck) CountCut() {
 func (deck Deck) GetCode() byte {
   position := deck.cards[0]
 
-  if position < byte(len(deck.cards)) {
-    return deck.cards[position]
-  } else {
+  // Only count 53 cards down for either joker, since you can't count 54 cards
+  // down from here in a 54 card stack!
+  if position == jokerB {
     return deck.cards[position - 1]
+  } else {
+    return deck.cards[position]
   }
 }
 
