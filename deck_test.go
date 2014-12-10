@@ -73,6 +73,83 @@ func TestThenCountCut(t *testing.T) {
   assertCardsEqual(expected, deck.cards, t)
 }
 
+func TestThenGetCode(t *testing.T) {
+  deck := NewUnkeyedDeck()
+  deck.MoveAJokerDown()
+  deck.MoveBJokerDown()
+  deck.TripleCut()
+  deck.CountCut()
+
+  actual := deck.GetCode()
+  if actual != 4 {
+    t.Fatalf("Expected code 4, got code %v", actual)
+  }
+}
+
+func TestGetNextCode(t *testing.T) {
+  deck := NewUnkeyedDeck()
+
+  actual := deck.GetNextCode()
+  expected := byte(4)
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 49
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 10
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 24
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 8
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 51
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 44
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 6
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 4
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+
+  actual = deck.GetNextCode()
+  expected = 33
+  if actual != expected {
+    t.Errorf("Expected code %v, got code %v", expected, actual)
+  }
+}
+
 func assertCardsEqual(expected, actual []byte, t *testing.T) {
   const numberOfCards = 54
 

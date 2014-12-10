@@ -58,6 +58,30 @@ func (deck *Deck) CountCut() {
   deck.cards = append(append(midSlice, minSlice...), count)
 }
 
+func (deck Deck) GetCode() byte {
+  position := deck.cards[0]
+
+  if position < byte(len(deck.cards)) {
+    return deck.cards[position]
+  } else {
+    return byte(54) // Fake
+  }
+}
+
+func (deck *Deck) GetNextCode() byte {
+  deck.MoveAJokerDown()
+  deck.MoveBJokerDown()
+  deck.TripleCut()
+  deck.CountCut()
+
+  result := deck.GetCode()
+  if result >= jokerA {
+    return deck.GetNextCode()
+  } else {
+    return result
+  }
+}
+
 func (deck *Deck) moveCardDown(card byte, distance int) {
   for i := 0; i < distance; i++ {
     jokerIndex := bytes.IndexByte(deck.cards, card)
