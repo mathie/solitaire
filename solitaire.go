@@ -2,10 +2,21 @@ package main
 
 import (
   "fmt"
+  "strings"
 )
 
 func main() {
   fmt.Println("Hello World.")
+}
+
+func OutputEncryptedString(message string) {
+  encryptedMessage := Encrypt(EncodeMessage(message), NewUnkeyedDeck())
+  fmt.Println(strings.Join(encryptedMessage, " "))
+}
+
+func OutputDecryptedString(message string) {
+  decryptedMessage := Decrypt(EncodeMessage(message), NewUnkeyedDeck())
+  fmt.Println(strings.Join(decryptedMessage, " "))
 }
 
 func Encrypt(message []string, deck *Deck) []string {
@@ -19,7 +30,7 @@ func Encrypt(message []string, deck *Deck) []string {
 func Decrypt(message []string, deck *Deck) []string {
   decryptor := func(messageChar, keystreamChar int) int {
     result := messageChar - keystreamChar
-    if result < 0 {
+    if result <= 0 {
       result += 26
     }
     return result

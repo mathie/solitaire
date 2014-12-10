@@ -22,9 +22,23 @@ func TestDecryption(t *testing.T) {
   assertSameStringArray(expected, actual, t)
 }
 
-func ExampleHelloWorld() {
-  main()
+func ExampleEncryption() {
+  OutputEncryptedString("Code in Ruby, live longer!")
 
   // Output:
-  // Hello World.
+  // GLNCQ MJAFF FVOMB JIYCB
+}
+
+func ExampleFirstChallenge() {
+  OutputDecryptedString("CLEPK HHNIY CFPWH FDFEH")
+
+  // Output:
+  // YOURC IPHER ISWOR KINGX
+}
+
+func ExampleSecondChallenge() {
+  OutputDecryptedString("ABVAW LWZSY OORYK DUPVH")
+
+  // Output:
+  // WELCO METOR UBYQU IZXXX
 }
