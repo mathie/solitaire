@@ -64,7 +64,7 @@ func (deck Deck) GetCode() byte {
   if position < byte(len(deck.cards)) {
     return deck.cards[position]
   } else {
-    return byte(54) // Fake
+    return deck.cards[position - 1]
   }
 }
 
