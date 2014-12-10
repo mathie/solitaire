@@ -89,65 +89,44 @@ func TestThenGetCode(t *testing.T) {
 func TestGetNextCode(t *testing.T) {
   deck := NewUnkeyedDeck()
 
-  actual := deck.GetNextCode()
-  expected := byte(4)
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
+  assertCodeEqual := func(expected, actual byte) {
+    if actual != expected {
+      t.Errorf("Expected code %v, got code %v", expected, actual)
+    }
   }
 
-  actual = deck.GetNextCode()
-  expected = 49
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
+  // First 10 codes from an unkeyed deck.
+  assertCodeEqual( 4, deck.GetNextCode())
+  assertCodeEqual(49, deck.GetNextCode())
+  assertCodeEqual(10, deck.GetNextCode())
+  assertCodeEqual(24, deck.GetNextCode())
+  assertCodeEqual( 8, deck.GetNextCode())
+  assertCodeEqual(51, deck.GetNextCode())
+  assertCodeEqual(44, deck.GetNextCode())
+  assertCodeEqual( 6, deck.GetNextCode())
+  assertCodeEqual( 4, deck.GetNextCode())
+  assertCodeEqual(33, deck.GetNextCode())
+}
+
+func TestGetNextChar(t *testing.T) {
+  deck := NewUnkeyedDeck()
+
+  assertCharEqual := func(expected, actual byte) {
+    if actual != expected {
+      t.Errorf("Expected %c, got %c", expected, actual)
+    }
   }
 
-  actual = deck.GetNextCode()
-  expected = 10
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
-
-  actual = deck.GetNextCode()
-  expected = 24
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
-
-  actual = deck.GetNextCode()
-  expected = 8
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
-
-  actual = deck.GetNextCode()
-  expected = 51
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
-
-  actual = deck.GetNextCode()
-  expected = 44
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
-
-  actual = deck.GetNextCode()
-  expected = 6
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
-
-  actual = deck.GetNextCode()
-  expected = 4
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
-
-  actual = deck.GetNextCode()
-  expected = 33
-  if actual != expected {
-    t.Errorf("Expected code %v, got code %v", expected, actual)
-  }
+  assertCharEqual('D', deck.GetNextChar())
+  assertCharEqual('W', deck.GetNextChar())
+  assertCharEqual('J', deck.GetNextChar())
+  assertCharEqual('X', deck.GetNextChar())
+  assertCharEqual('H', deck.GetNextChar())
+  assertCharEqual('Y', deck.GetNextChar())
+  assertCharEqual('R', deck.GetNextChar())
+  assertCharEqual('F', deck.GetNextChar())
+  assertCharEqual('D', deck.GetNextChar())
+  assertCharEqual('G', deck.GetNextChar())
 }
 
 func assertCardsEqual(expected, actual []byte, t *testing.T) {

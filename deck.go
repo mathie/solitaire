@@ -84,6 +84,11 @@ func (deck *Deck) GetNextCode() byte {
   }
 }
 
+func (deck *Deck) GetNextChar() byte {
+  code := deck.GetNextCode()
+  return (code % 26) + 'A' - 1
+}
+
 func (deck *Deck) moveCardDown(card byte, distance int) {
   for i := 0; i < distance; i++ {
     jokerIndex := bytes.IndexByte(deck.cards, card)
