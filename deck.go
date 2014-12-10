@@ -46,7 +46,7 @@ func (deck *Deck) TripleCut() {
   midSlice := deck.cards[firstIndex:secondIndex + 1]
   maxSlice := deck.cards[secondIndex + 1:]
 
-  deck.cards = append(maxSlice, append(midSlice, minSlice...)...)
+  deck.cards = append(append(maxSlice, midSlice...), minSlice...)
 }
 
 func (deck *Deck) CountCut() {
